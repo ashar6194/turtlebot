@@ -53,12 +53,18 @@ class GoForward():
         max_y, max_x, channels = np.shape(self.rgb_image)
         ind_x = np.where(np.sum(centre_image, axis = 0) != 0)
         ind_y = np.where(np.sum(centre_image, axis = 1) != 0)
-        centroid_x = (max(max(ind_x)) + min(min(ind_x))) / 2;
-        centroid_y = (max(max(ind_y)) + min(min(ind_y))) / 2;
-        print (centroid_x, centroid_y, max_x/2, max_y/2)
 
-        self.object_seg[centroid_y, centroid_x, :] = (0, 0, 255)
+        centroid_x = np.mean(ind_x);
+        centroid_y = np.mean(ind_y);
         
+        self.object_seg[centroid_y, centroid_x, :] = (0, 0, 255)
+        # if np.isnan(centroid_x) or np.isnan(centroid_y):
+        #     centroid_x = max_x/2
+        #     centroid_y = max_y/2
+        #     print ('Cant find the object')
+
+        print (np.mean(ind_x), np.mean(ind_y), max_x/2, max_y/2)
+
         self.ang_vel = -0.01* (centroid_x - (max_x/2))
         if ( self.ang_vel >= 0.05 ):
             self.ang_vel = 0.05
